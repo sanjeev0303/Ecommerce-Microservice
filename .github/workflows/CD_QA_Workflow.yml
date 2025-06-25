@@ -35,7 +35,7 @@ jobs:
          echo MSG_QUEUE_URL=amqps://ngbbtcoo:S3bLPtonpJLvj4LlEO-2x_Qeqpbwx9dz@fuji.lmq.cloudamqp.com/ngbbtcoo >> .env
          echo EXCHANGE_NAME=ONLINE_STORE >> .env
          echo PORT=8002 >> .env
-         cat .evn
+         cat .env
 
       - name: Create Shopping Env file
         working-directory: ./shopping
