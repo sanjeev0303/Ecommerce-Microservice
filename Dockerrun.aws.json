@@ -1,5 +1,5 @@
 {
-  "AWSEBDockerrunVersion": "2",
+  "AWSEBDockerrunVersion": "1",
   "containerDefinitions": [
     {
       "name": "rabbitmq",
@@ -46,7 +46,7 @@
           "name": "PORT",
           "value": "8002"
         }
-       
+
       ]
     },
     {
