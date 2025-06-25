@@ -1,5 +1,5 @@
 {
-  "AWSEBDockerrunVersion": "5",
+  "AWSEBDockerrunVersion": "1",
   "containerDefinitions": [
     {
       "name": "rabbitmq",
