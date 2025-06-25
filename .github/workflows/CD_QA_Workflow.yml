@@ -56,7 +56,7 @@ jobs:
 
       - name: Generate deployment package
         run: |
-          zip -r deploy.zip Dockerrun.aws.json customer/ products/ shopping/ -x "*.git/*"
+          zip deploy.zip Dockerrun.aws.json
       - name: Deploy on Elastic beanstalk QA Env
         uses: einaregilsson/beanstalk-deploy@v20
         with: 
