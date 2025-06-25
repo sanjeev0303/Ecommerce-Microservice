@@ -1,0 +1,116 @@
+{
+  "AWSEBDockerrunVersion": "2",
+  "containerDefinitions": [
+    {
+      "name": "rabbitmq",
+      "image": "rabbitmq:3-management-alpine",
+      "essential": true,
+      "memory": 512,
+      "portMappings": [
+        {
+          "hostPort": 5672,
+          "containerPort": 5672,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "RABBITMQ_DEFAULT_USER",
+          "value": "admin"
+        },
+        {
+          "name": "RABBITMQ_DEFAULT_PASS",
+          "value": "admin123"
+        }
+      ]
+    },
+    {
+      "name": "products",
+      "image": "your-registry/products-service:latest",
+      "essential": true,
+      "memory": 512,
+      "portMappings": [
+        {
+          "hostPort": 8002,
+          "containerPort": 8002,
+          "protocol": "tcp"
+        }
+      ],
+      "links": ["rabbitmq"],
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "PORT",
+          "value": "8002"
+        }
+       
+      ]
+    },
+    {
+      "name": "shopping",
+      "image": "your-registry/shopping-service:latest",
+      "essential": true,
+      "memory": 512,
+      "portMappings": [
+        {
+          "hostPort": 8003,
+          "containerPort": 8003,
+          "protocol": "tcp"
+        }
+      ],
+      "links": ["rabbitmq"],
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "PORT",
+          "value": "8003"
+        }
+
+      ]
+    },
+    {
+      "name": "customer",
+      "image": "your-registry/customer-service:latest",
+      "essential": true,
+      "memory": 512,
+      "portMappings": [
+        {
+          "hostPort": 8001,
+          "containerPort": 8001,
+          "protocol": "tcp"
+        }
+      ],
+      "links": ["rabbitmq"],
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "PORT",
+          "value": "8001"
+        }
+      ]
+    },
+    {
+      "name": "nginx-proxy",
+      "image": "your-registry/nginx-proxy:latest",
+      "essential": true,
+      "memory": 256,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "links": ["customer", "products", "shopping"]
+    }
+  ]
+}
