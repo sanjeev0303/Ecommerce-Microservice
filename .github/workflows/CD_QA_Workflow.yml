@@ -57,6 +57,7 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: microservice-testing
           environment_name: Microservice-testing-env
+          existing_bucket_name: my-existing-elasticbeanstalk-bucket
           version_label: "ver-${{ github.sha }}"
-          region: eu-central-1
+          region: us-east-1
           deployment_package: deploy.zip
