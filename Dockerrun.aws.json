@@ -8,8 +8,8 @@
       "memory": 512,
       "portMappings": [
         {
-          "hostPort": 5672,
           "containerPort": 5672,
+          "hostPort": 5672,
           "protocol": "tcp"
         }
       ],
@@ -26,14 +26,13 @@
     },
     {
       "name": "products",
-      "image": "your-registry/products-service:latest",
+      "image": "625209709846.dkr.ecr.us-east-1.amazonaws.com/products:latest",
       "essential": true,
       "memory": 512,
       "portMappings": [
         {
-          "hostPort": 8002,
           "containerPort": 8002,
-          "protocol": "tcp"
+          "hostPort": 8002
         }
       ],
       "links": ["rabbitmq"],
@@ -46,19 +45,17 @@
           "name": "PORT",
           "value": "8002"
         }
-
       ]
     },
     {
       "name": "shopping",
-      "image": "your-registry/shopping-service:latest",
+      "image": "625209709846.dkr.ecr.us-east-1.amazonaws.com/shopping:latest",
       "essential": true,
       "memory": 512,
       "portMappings": [
         {
-          "hostPort": 8003,
           "containerPort": 8003,
-          "protocol": "tcp"
+          "hostPort": 8003
         }
       ],
       "links": ["rabbitmq"],
@@ -71,19 +68,17 @@
           "name": "PORT",
           "value": "8003"
         }
-
       ]
     },
     {
       "name": "customer",
-      "image": "your-registry/customer-service:latest",
+      "image": "625209709846-id.dkr.ecr.us-east-1.amazonaws.com/customer:latest",
       "essential": true,
       "memory": 512,
       "portMappings": [
         {
-          "hostPort": 8001,
           "containerPort": 8001,
-          "protocol": "tcp"
+          "hostPort": 8001
         }
       ],
       "links": ["rabbitmq"],
@@ -100,17 +95,16 @@
     },
     {
       "name": "nginx-proxy",
-      "image": "your-registry/nginx-proxy:latest",
+      "image": "625209709846.dkr.ecr.us-east-1.amazonaws.com/nginx-proxy:latest",
       "essential": true,
       "memory": 256,
       "portMappings": [
         {
-          "hostPort": 80,
           "containerPort": 80,
-          "protocol": "tcp"
+          "hostPort": 80
         }
       ],
-      "links": ["customer", "products", "shopping"]
+      "links": ["products", "shopping", "customer"]
     }
   ]
 }
