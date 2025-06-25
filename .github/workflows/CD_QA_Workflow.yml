@@ -1,0 +1,66 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Deploy on QA
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  deploy_on_qa:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v2
+
+      - name: Create Customer Env file
+        working-directory: ./customer
+        run: 
+         touch .env
+         echo APP_SECRET=jksadfhkljvvnlakdrflqeruiq34dsfhlqikuewrqiwl345u8i94riufrhkljerfhqwueirthqwlkfjdghwelrthhwerutidfgjklhwriutwet5uw7i45t8u7 >> .evn
+         echo MONGODB_URI=mongodb+srv://sanjeev081021:cbXrIZATRGfMVIbe@astra.ci6bgd2.mongodb.net/?retryWrites=true&w=majority&appName=Astra >> .evn
+         echo MSG_QUEUE_URL=amqps://ngbbtcoo:S3bLPtonpJLvj4LlEO-2x_Qeqpbwx9dz@fuji.lmq.cloudamqp.com/ngbbtcoo >> .evn
+         echo EXCHANGE_NAME=ONLINE_STORE >> .evn
+         echo PORT=8001 >> .env
+         cat .evn
+
+      - name: Create Products Env file
+        working-directory: ./products
+        run: 
+         touch .env
+         echo APP_SECRET=jksadfhkljvvnlakdrflqeruiq34dsfhlqikuewrqiwl345u8i94riufrhkljerfhqwueirthqwlkfjdghwelrthhwerutidfgjklhwriutwet5uw7i45t8u7 >> .evn
+         echo MONGODB_URI=mongodb+srv://sanjeev081021:I9fUN10IOFHytHv4@brahmos.tq3h4lh.mongodb.net/?retryWrites=true&w=majority&appName=Brahmos >> .evn
+         echo MSG_QUEUE_URL=amqps://ngbbtcoo:S3bLPtonpJLvj4LlEO-2x_Qeqpbwx9dz@fuji.lmq.cloudamqp.com/ngbbtcoo >> .evn
+         echo EXCHANGE_NAME=ONLINE_STORE >> .evn
+         echo PORT=8002 >> .env
+         cat .evn
+
+      - name: Create Shppoing Env file
+        working-directory: ./shopping
+        run: 
+         touch .env
+         echo APP_SECRET=jksadfhkljvvnlakdrflqeruiq34dsfhlqikuewrqiwl345u8i94riufrhkljerfhqwueirthqwlkfjdghwelrthhwerutidfgjklhwriutwet5uw7i45t8u7 >> .evn
+         echo MONGODB_URI=mongodb+srv://sanjeev081021:3Og1FBf0WmqsryyZ@pinaca.3xd6zsv.mongodb.net/?retryWrites=true&w=majority&appName=Pinaca >> .evn
+         echo MSG_QUEUE_URL=amqps://ngbbtcoo:S3bLPtonpJLvj4LlEO-2x_Qeqpbwx9dz@fuji.lmq.cloudamqp.com/ngbbtcoo >> .evn
+         echo EXCHANGE_NAME=ONLINE_STORE >> .evn
+         echo PORT=8003 >> .env
+         cat .evn
+       
+      - name: Generate deployment package
+        run: 
+         zip -r deploy.zip . -x '*.git'
+
+      - name: Deploy on Elastic beanstalk QA Env
+        uses: einaregilsson/beanstalk-deploy@v20
+        with: 
+          aws_access_key: ${{ secrets.AWS_ACCESS_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          application_name: microservice-testing
+          environment_name: Microservice-testing-env
+          version_label: "ver-${{ github.sha }}"
+          region: eu-central-1
+          deployment_package: deploy.zip
