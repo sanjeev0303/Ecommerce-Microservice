@@ -47,9 +47,16 @@ jobs:
          echo PORT=8003 >> .env
          cat .env
        
-      - name: Generate deployment package
-        run: zip -r deploy.zip . -x "*.git/*"
+      - name: Validate Dockerrun
+        run: |
+          if [ ! -f Dockerrun.aws.json ]; then
+            echo "Error: Dockerrun.aws.json missing at repo root" >&2
+            exit 1
+          fi
 
+      - name: Generate deployment package
+        run: |
+          zip -r deploy.zip Dockerrun.aws.json customer/ products/ shopping/ -x "*.git/*"
       - name: Deploy on Elastic beanstalk QA Env
         uses: einaregilsson/beanstalk-deploy@v20
         with: 
